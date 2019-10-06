@@ -21,6 +21,10 @@ app.get("/getRestaurants", async (req, res) => {
     res.json({ code: "Success" });
   } catch (err) {
     console.log("Error Encountered: " + err);
+    res.json({
+      message:
+        "I'm having trouble getting ahold of my contacts at this moment in time please try again later."
+    });
   }
 });
 
