@@ -45,7 +45,7 @@ app.get("/getRestaurants", async (req, res) => {
     };
     console.log(message);
 
-    res.json({
+    return res.json({
       payload: response,
       fulfillmentText: message,
       speech: message,
@@ -54,7 +54,7 @@ app.get("/getRestaurants", async (req, res) => {
     });
   } catch (err) {
     console.log("Error Encountered: " + err);
-    res.json({
+    return res.json({
       message:
         "I'm having trouble getting ahold of my contacts at this moment in time please try again later."
     });
