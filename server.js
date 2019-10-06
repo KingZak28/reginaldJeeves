@@ -45,7 +45,13 @@ app.get("/getRestaurants", async (req, res) => {
     };
     console.log(message);
 
-    res.json({ payload: response });
+    res.json({
+      payload: response,
+      fulfillmentText: message,
+      speech: message,
+      displayText: message,
+      source: "webhook"
+    });
   } catch (err) {
     console.log("Error Encountered: " + err);
     res.json({
