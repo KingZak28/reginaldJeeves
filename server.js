@@ -8,8 +8,16 @@ const yelp = require("yelp-fusion");
 const client = yelp.client(YELP_KEY);
 app.use(bodyParser.json());
 
-app.get("/getRestaurants", async (req, res) => {
+const makeRestaurantIntent = (agent, message) => {
+  const restaurantIntent = agent => {
+    agent.add(message);
+  };
+  return restaurantIntent;
+};
+
+const webhookProcessing = async (req, res) => {
   const agent = new WebhookClient({ req, res });
+  let message = "";
   try {
     const location =
       req.body.queryResult &&
@@ -28,26 +36,27 @@ app.get("/getRestaurants", async (req, res) => {
       entry =>
         `${entry.name} at ${entry.location.address1} rated at ${entry.rating} stars`
     );
-    const message = `My friends at yelp say that ${randomize(
+    message = `My friends at yelp say that ${randomize(
       names
     )} in ${location} is quite the restaurant indeed. My contacts never let me down, a butler is well connected you know!`;
 
     console.log(message);
-    const restaurantIntent = agent => {
-      agent.add(message);
-    };
-    let intentMap = new Map();
-    intentMap.set("restaurantIntent", restaurantIntent);
-    agent.handleRequest(intentMap);
-    res.json({ code: "success" });
+    restaurantIntent = makeRestaurantIntent(agent, message);
   } catch (err) {
-    res.json({
-      message:
-        "I'm having trouble getting ahold of my contacts at this moment in time please try again later."
-    });
+    message =
+      "I'm having trouble getting ahold of my contacts at this moment in time please try again later.";
+    restaurantIntent = makeRestaurantIntent(agent, message);
   }
+  let intentMap = new Map();
+  intentMap.set("restaurantIntent", restaurantIntent);
+  agent.handleRequest(intentMap);
+};
+
+app.get("/", async (req, res) => {
+  console.info("Server was hit");
+  webhookProcessing(req, res);
 });
 
 app.listen(process.env.PORT || 8000, () => {
-  console.log("Server is alive G");
+  console.log(`Server is alive G and listening on port: ${process.env.PORT}`);
 });
