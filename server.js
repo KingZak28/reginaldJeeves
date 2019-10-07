@@ -15,44 +15,50 @@ const makeRestaurantIntent = (agent, message) => {
   return restaurantIntent;
 };
 
-const webhookProcessing = async (req, res) => {
-  const agent = new WebhookClient({ req, res });
+const yelpMessage = (req, agent) => {
   let message = "";
-  try {
-    const location =
-      req.body.queryResult &&
-      req.body.queryResult.parameters &&
-      req.body.queryResult.parameters.geocity
-        ? req.body.queryResult.parameters.geocity
-        : "Liverpool england"; //Default city for now
-    const yelpResponse = await client.search({
+  const location =
+    req.body.queryResult &&
+    req.body.queryResult.parameters &&
+    req.body.queryResult.parameters.geocity
+      ? req.body.queryResult.parameters.geocity
+      : "Liverpool england"; //Default city for now
+  client
+    .search({
       location: location
+    })
+    .then(response => {
+      const data = response.jsonBody.businesses;
+      console.log(data);
+
+      const names = data.map(
+        entry =>
+          `${entry.name} at ${entry.location.address1} rated at ${entry.rating} stars`
+      );
+      message = `My friends at yelp say that ${randomize(
+        names
+      )} in ${location} is quite the restaurant indeed. My contacts never let me down, a butler is well connected you know!`;
+
+      console.log(message);
+      return (restaurantIntent = makeRestaurantIntent(agent, message));
+    })
+    .catch(e => {
+      console.log(e);
+      message =
+        "I'm having trouble getting ahold of my contacts at this moment in time please try again later.";
+      return (restaurantIntent = makeRestaurantIntent(agent, message));
     });
+};
 
-    const data = yelpResponse.jsonBody.businesses;
-    console.log(data);
-
-    const names = data.map(
-      entry =>
-        `${entry.name} at ${entry.location.address1} rated at ${entry.rating} stars`
-    );
-    message = `My friends at yelp say that ${randomize(
-      names
-    )} in ${location} is quite the restaurant indeed. My contacts never let me down, a butler is well connected you know!`;
-
-    console.log(message);
-    restaurantIntent = makeRestaurantIntent(agent, message);
-  } catch (err) {
-    message =
-      "I'm having trouble getting ahold of my contacts at this moment in time please try again later.";
-    restaurantIntent = makeRestaurantIntent(agent, message);
-  }
+const webhookProcessing = (req, res) => {
+  const agent = new WebhookClient({ req, res });
+  const restaurantIntent = yelpMessage(req, agent);
   let intentMap = new Map();
   intentMap.set("restaurantIntent", restaurantIntent);
   agent.handleRequest(intentMap);
 };
 
-app.get("/", async (req, res) => {
+app.get("/", (req, res) => {
   console.info("Server was hit");
   webhookProcessing(req, res);
 });
