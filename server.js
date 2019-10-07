@@ -59,7 +59,7 @@ const webhookProcessing = (req, res) => {
   agent.handleRequest(intentMap);
 };
 
-app.get("/", (req, res) => {
+app.post("/", (req, res) => {
   console.log("Server was hit");
   webhookProcessing(req, res);
 });
