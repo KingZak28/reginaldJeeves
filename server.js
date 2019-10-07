@@ -41,13 +41,15 @@ const yelpMessage = (req, agent) => {
       )} in ${location} is quite the restaurant indeed. My contacts never let me down, a butler is well connected you know!`;
 
       console.log(message);
-      return (restaurantIntent = makeRestaurantIntent(agent, message));
+      restaurantIntent = makeRestaurantIntent(agent, message);
+      return restaurantIntent;
     })
     .catch(e => {
-      console.log(e);
+      console.log(`Error encountered: ${e}`);
       message =
         "I'm having trouble getting ahold of my contacts at this moment in time please try again later.";
-      return (restaurantIntent = makeRestaurantIntent(agent, message));
+      restaurantIntent = makeRestaurantIntent(agent, message);
+      return restaurantIntent;
     });
 };
 
