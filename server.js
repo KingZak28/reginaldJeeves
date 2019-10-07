@@ -52,7 +52,7 @@ const yelpMessage = (req, agent) => {
 };
 
 const webhookProcessing = (req, res) => {
-  const agent = new WebhookClient({ req, res });
+  const agent = new WebhookClient({ request: req, response: res });
   const restaurantIntent = yelpMessage(req, agent);
   let intentMap = new Map();
   intentMap.set("restaurantIntent", restaurantIntent);
