@@ -61,6 +61,7 @@ const webhookProcessing = (req, res) => {
 
 app.post("/", (req, res) => {
   console.log("Server was hit");
+  console.log(req);
   webhookProcessing(req, res);
 });
 
