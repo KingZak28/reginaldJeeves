@@ -1,6 +1,7 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const randomize = require("./utils/randomize");
+const { WebhookClient } = require("dialogflow-fulfillment");
 const app = express();
 const { YELP_KEY } = process.env;
 const yelp = require("yelp-fusion");
@@ -8,6 +9,7 @@ const client = yelp.client(YELP_KEY);
 app.use(bodyParser.json());
 
 app.get("/getRestaurants", async (req, res) => {
+  const agent = new WebhookClient({ req, res });
   try {
     const location =
       req.body.queryResult &&
@@ -29,32 +31,17 @@ app.get("/getRestaurants", async (req, res) => {
     const message = `My friends at yelp say that ${randomize(
       names
     )} in ${location} is quite the restaurant indeed. My contacts never let me down, a butler is well connected you know!`;
-    const response = {
-      google: {
-        expectUserResponse: true,
-        richResponse: {
-          items: [
-            {
-              simpleResponse: {
-                textToSpeech: message
-              }
-            }
-          ]
-        }
-      }
-    };
-    console.log(message);
 
-    return res.json({
-      payload: response,
-      fulfillmentText: message,
-      speech: message,
-      displayText: message,
-      source: "webhook"
-    });
+    console.log(message);
+    const restaurantIntent = agent => {
+      agent.add(message);
+    };
+    let intentMap = new Map();
+    intentMap.set("restaurantIntent", restaurantIntent);
+    agent.handleRequest(intentMap);
+    res.json({ code: "success" });
   } catch (err) {
-    console.log("Error Encountered: " + err);
-    return res.json({
+    res.json({
       message:
         "I'm having trouble getting ahold of my contacts at this moment in time please try again later."
     });
