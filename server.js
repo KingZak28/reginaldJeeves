@@ -13,6 +13,7 @@ const makeRestaurantIntent = (agent, message) => {
   const restaurantIntent = agent => {
     agent.add(message);
   };
+  console.log(`agent: ${agent}`);
   return restaurantIntent;
 };
 
