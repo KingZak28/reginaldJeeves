@@ -12,7 +12,7 @@ const makeRestaurantIntent = (agent, message) => {
   const restaurantIntent = agent => {
     agent.add(message);
   };
-  console.log(`agent: ${agent}`);
+  console.log(`Message: ${message}`);
   return restaurantIntent;
 };
 
@@ -46,6 +46,7 @@ const yelpMessage = (req, agent) => {
     console.log(message);
     return (restaurantIntent = makeRestaurantIntent(agent, message));
   } catch (err) {
+    console.log(`Encountered this error: ${err}`);
     message =
       "I'm having trouble getting ahold of my contacts at this moment in time please try again later.";
     return (restaurantIntent = makeRestaurantIntent(agent, message));
