@@ -7,6 +7,7 @@ const { YELP_KEY } = process.env;
 const yelp = require("yelp-fusion");
 const client = yelp.client(YELP_KEY);
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const makeRestaurantIntent = (agent, message) => {
   const restaurantIntent = agent => {
