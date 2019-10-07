@@ -59,7 +59,7 @@ const webhookProcessing = (req, res) => {
 };
 
 app.get("/", (req, res) => {
-  console.info("Server was hit");
+  console.log("Server was hit");
   webhookProcessing(req, res);
 });
 
