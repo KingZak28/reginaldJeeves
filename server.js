@@ -45,7 +45,14 @@ const webhookProcessing = (req, res, msg) => {
 
   const restaurantIntent = agent => {
     console.log(`Here: ${msg}`);
-    agent.add(msg);
+    msg
+      .then(message => {
+        console.log(`Promised resolved message is ${message}`);
+        agent.add(message);
+      })
+      .catch(err => {
+        agent.add("Having trouble now, try again later.");
+      });
   };
 
   let intentMap = new Map();
