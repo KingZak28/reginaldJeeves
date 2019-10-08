@@ -8,34 +8,34 @@ const yelp = require("yelp-fusion");
 const client = yelp.client(YELP_KEY);
 app.use(bodyParser.json());
 
-const yelpMessage = req => {
+const yelpMessage = async req => {
   let message = "test";
-  const location =
-    req.body.queryResult &&
-    req.body.queryResult.parameters &&
-    req.body.queryResult.parameters.geocity
-      ? req.body.queryResult.parameters.geocity
-      : "Liverpool england"; //Default city for now
-  client
-    .search({
+  try {
+    const location =
+      req.body.queryResult &&
+      req.body.queryResult.parameters &&
+      req.body.queryResult.parameters.geocity
+        ? req.body.queryResult.parameters.geocity
+        : "Liverpool england"; //Default city for now
+    const yelpResponse = await client.search({
       location: location
-    })
-    .then(response => {
-      const data = response.jsonBody.businesses;
-
-      const names = data.map(
-        entry =>
-          `${entry.name} at ${entry.location.address1} rated at ${entry.rating} stars`
-      );
-      message = `My friends at yelp say that ${randomize(
-        names
-      )} in ${location} is quite the restaurant indeed. My contacts never let me down, a butler is well connected you know!`;
-    })
-    .catch(err => {
-      console.log(`Encountered this error: ${err}`);
-      message =
-        "I'm having trouble getting ahold of my contacts at this moment in time please try again later.";
     });
+
+    const data = yelpResponse.jsonBody.businesses;
+
+    const names = data.map(
+      entry =>
+        `${entry.name} at ${entry.location.address1} rated at ${entry.rating} stars`
+    );
+    message = `My friends at yelp say that ${randomize(
+      names
+    )} in ${location} is quite the restaurant indeed. My contacts never let me down, a butler is well connected you know!`;
+    console.log(message);
+  } catch (err) {
+    console.log(`Encountered this error: ${err}`);
+    message =
+      "I'm having trouble getting ahold of my contacts at this moment in time please try again later.";
+  }
   return message;
 };
 
