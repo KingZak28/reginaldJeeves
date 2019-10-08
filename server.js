@@ -8,12 +8,7 @@ const yelp = require("yelp-fusion");
 const client = yelp.client(YELP_KEY);
 app.use(bodyParser.json());
 
-const restaurantIntent = (agent, message) => {
-  agent.add(message);
-  console.log("Here");
-};
-
-const yelpMessage = (req, agent) => {
+const yelpMessage = req => {
   let message = "";
   const location =
     req.body.queryResult &&
@@ -48,8 +43,11 @@ const yelpMessage = (req, agent) => {
 
 const webhookProcessing = (req, res) => {
   const agent = new WebhookClient({ request: req, response: res });
-  const msg = yelpMessage(req, agent);
-  restaurantIntent(agent, msg);
+  const msg = yelpMessage(req);
+  const restaurantIntent = agent => {
+    agent.add(msg);
+    console.log("Here");
+  };
   let intentMap = new Map();
   intentMap.set("restaurantIntent", restaurantIntent);
   console.log("Here");
