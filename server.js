@@ -39,9 +39,8 @@ const yelpMessage = async req => {
   return message;
 };
 
-const webhookProcessing = async (req, res) => {
+const webhookProcessing = (req, res, msg) => {
   const agent = new WebhookClient({ request: req, response: res });
-  const msg = yelpMessage(req);
   console.log(`Here is message ${msg}`);
   msg
     .then(msg => {
@@ -52,7 +51,7 @@ const webhookProcessing = async (req, res) => {
     })
     .catch(err => {
       const restaurantIntent = agent => {
-        console.log(`Here: ${msg}`);
+        console.log(`Here: ${msg} and error was ${err}`);
         agent.add(
           "I'm having trouble getting ahold of my contacts at this moment in time please try again later."
         );
@@ -67,7 +66,8 @@ const webhookProcessing = async (req, res) => {
 
 app.post("/", (req, res) => {
   console.info("Server was hit");
-  webhookProcessing(req, res);
+  const msg = yelpMessage(req);
+  webhookProcessing(req, res, msg);
 });
 
 app.listen(process.env.PORT || 8000, () => {
