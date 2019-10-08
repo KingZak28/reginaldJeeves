@@ -30,7 +30,6 @@ const yelpMessage = async req => {
     message = `My friends at yelp say that ${randomize(
       names
     )} in ${location} is quite the restaurant indeed. My contacts never let me down, a butler is well connected you know!`;
-    console.log(message);
   } catch (err) {
     console.log(`Encountered this error: ${err}`);
     message =
