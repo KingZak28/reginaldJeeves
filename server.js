@@ -9,7 +9,7 @@ const client = yelp.client(YELP_KEY);
 app.use(bodyParser.json());
 
 const yelpMessage = req => {
-  let message = "";
+  let message = "test";
   const location =
     req.body.queryResult &&
     req.body.queryResult.parameters &&
@@ -30,15 +30,13 @@ const yelpMessage = req => {
       message = `My friends at yelp say that ${randomize(
         names
       )} in ${location} is quite the restaurant indeed. My contacts never let me down, a butler is well connected you know!`;
-
-      return message;
     })
     .catch(err => {
       console.log(`Encountered this error: ${err}`);
       message =
         "I'm having trouble getting ahold of my contacts at this moment in time please try again later.";
-      return message;
     });
+  return message;
 };
 
 const webhookProcessing = (req, res) => {
