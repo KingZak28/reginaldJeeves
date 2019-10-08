@@ -16,7 +16,7 @@ const makeRestaurantIntent = (agent, message) => {
   return restaurantIntent;
 };
 
-const yelpMessage = (req, agent) => {
+const yelpMessage = async (req, agent) => {
   let message = "";
   try {
     const location =
@@ -25,15 +25,11 @@ const yelpMessage = (req, agent) => {
       req.body.queryResult.parameters.geocity
         ? req.body.queryResult.parameters.geocity
         : "Liverpool england"; //Default city for now
-    client
-      .search({
-        location: location
-      })
-      .then(response => {
-        const data = response.jsonBody.businesses;
-      });
+    const yelpResponse = await client.search({
+      location: location
+    });
 
-    console.log(data);
+    const data = yelpResponse.jsonBody.businesses;
 
     const names = data.map(
       entry =>
