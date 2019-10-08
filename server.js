@@ -38,25 +38,18 @@ const yelpMessage = async req => {
   return message;
 };
 
-const webhookProcessing = (req, res, msg) => {
+const webhookProcessing = async (req, res, msg) => {
   const agent = new WebhookClient({ request: req, response: res });
   console.log(`Here is message ${msg}`);
-
+  const message = await msg;
   const restaurantIntent = agent => {
-    console.log(`Here: ${msg}`);
-    msg
-      .then(message => {
-        console.log(`Promised resolved message is ${message}`);
-        agent.add(message);
-      })
-      .catch(err => {
-        agent.add("Having trouble now, try again later.");
-      });
+    console.log(`Here inside restaurant intent: ${message}`);
+    agent.add(message);
   };
 
   let intentMap = new Map();
   intentMap.set("restaurantIntent", restaurantIntent);
-  console.log("Here");
+  console.log("Here before handle request");
   agent.handleRequest(intentMap);
 };
 
