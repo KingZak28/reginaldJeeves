@@ -42,21 +42,11 @@ const yelpMessage = async req => {
 const webhookProcessing = (req, res, msg) => {
   const agent = new WebhookClient({ request: req, response: res });
   console.log(`Here is message ${msg}`);
-  msg
-    .then(msg => {
-      const restaurantIntent = agent => {
-        console.log(`Here: ${msg}`);
-        agent.add(msg);
-      };
-    })
-    .catch(err => {
-      const restaurantIntent = agent => {
-        console.log(`Here: ${msg} and error was ${err}`);
-        agent.add(
-          "I'm having trouble getting ahold of my contacts at this moment in time please try again later."
-        );
-      };
-    });
+
+  const restaurantIntent = agent => {
+    console.log(`Here: ${msg}`);
+    agent.add(msg);
+  };
 
   let intentMap = new Map();
   intentMap.set("restaurantIntent", restaurantIntent);
