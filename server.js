@@ -8,12 +8,9 @@ const yelp = require("yelp-fusion");
 const client = yelp.client(YELP_KEY);
 app.use(bodyParser.json());
 
-const makeRestaurantIntent = (agent, message) => {
-  const restaurantIntent = agent => {
-    agent.add(message);
-  };
-  console.log(`Message: ${message}`);
-  return restaurantIntent;
+const restaurantIntent = (agent, message) => {
+  agent.add(message);
+  console.log("Here");
 };
 
 const yelpMessage = (req, agent) => {
@@ -30,7 +27,6 @@ const yelpMessage = (req, agent) => {
     })
     .then(response => {
       const data = response.jsonBody.businesses;
-      console.log(data);
 
       const names = data.map(
         entry =>
@@ -40,20 +36,20 @@ const yelpMessage = (req, agent) => {
         names
       )} in ${location} is quite the restaurant indeed. My contacts never let me down, a butler is well connected you know!`;
 
-      console.log(message);
-      return (restaurantIntent = makeRestaurantIntent(agent, message));
+      return message;
     })
     .catch(err => {
       console.log(`Encountered this error: ${err}`);
       message =
         "I'm having trouble getting ahold of my contacts at this moment in time please try again later.";
-      return (restaurantIntent = makeRestaurantIntent(agent, message));
+      return message;
     });
 };
 
 const webhookProcessing = (req, res) => {
   const agent = new WebhookClient({ request: req, response: res });
-  const restaurantIntent = yelpMessage(req, agent);
+  const msg = yelpMessage(req, agent);
+  restaurantIntent(agent, msg);
   let intentMap = new Map();
   intentMap.set("restaurantIntent", restaurantIntent);
   console.log("Here");
