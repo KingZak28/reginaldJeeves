@@ -6,6 +6,7 @@ const app = express();
 const { YELP_KEY } = process.env;
 const yelp = require("yelp-fusion");
 const client = yelp.client(YELP_KEY);
+const language = require("./en.json");
 app.use(bodyParser.json());
 
 const yelpMessage = async req => {
@@ -28,9 +29,11 @@ const yelpMessage = async req => {
       entry =>
         `${entry.name} at ${entry.location.address1} rated at ${entry.rating} stars`
     );
-    message = `My friends at yelp say that ${randomize(
+    message = `${randomize(language.restaurantPrefixes)} ${randomize(
       names
-    )} in ${location} is quite the restaurant indeed. My contacts never let me down, a butler is well connected you know!`;
+    )} in ${location} is quite the restaurant indeed. ${randomize(
+      language.responseSuffixes
+    )}`;
   } catch (err) {
     console.log(`Encountered this error: ${err}`);
     message =
