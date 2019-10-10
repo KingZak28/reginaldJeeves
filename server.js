@@ -51,7 +51,7 @@ const webhookProcessing = async (req, res, restaurantResult) => {
       agent.add(
         new Card({
           title: results[0],
-          image_url: results[2],
+          imageUrl: results[2],
           text: results[1],
           buttonText: "See more reviews!",
           buttonUrl: results[3]
