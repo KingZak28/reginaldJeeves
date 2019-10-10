@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 
 const yelpMessage = async req => {
   let message = "test";
-  let results = [];
+  let result = [];
   try {
     const location =
       req.body.queryResult &&
