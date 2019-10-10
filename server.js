@@ -1,7 +1,7 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const randomize = require("./utils/randomize");
-const { WebhookClient } = require("dialogflow-fulfillment");
+const { WebhookClient, Card } = require("dialogflow-fulfillment");
 const app = express();
 const { YELP_KEY } = process.env;
 const yelp = require("yelp-fusion");
@@ -21,6 +21,7 @@ const yelpMessage = async req => {
       location: location
     });
 
+    console.log(yelpResponse.jsonBody);
     const data = yelpResponse.jsonBody.businesses;
 
     const names = data.map(
@@ -40,7 +41,6 @@ const yelpMessage = async req => {
 
 const webhookProcessing = async (req, res, msg) => {
   const agent = new WebhookClient({ request: req, response: res });
-  console.log(agent.request);
   const message = await msg;
   const restaurantIntent = agent => {
     console.log(`Here inside restaurant intent: ${message}`);
