@@ -10,6 +10,7 @@ app.use(bodyParser.json());
 
 const yelpMessage = async req => {
   let message = "test";
+  let results = [];
   try {
     const location =
       req.body.queryResult &&
@@ -24,27 +25,41 @@ const yelpMessage = async req => {
     console.log(yelpResponse.jsonBody);
     const data = yelpResponse.jsonBody.businesses;
 
-    const names = data.map(
-      entry =>
-        `${entry.name} at ${entry.location.address1} rated at ${entry.rating} stars`
-    );
-    message = `My friends at yelp say that ${randomize(
-      names
-    )} in ${location} is quite the restaurant indeed. My contacts never let me down, a butler is well connected you know!`;
+    const totalResults = data.map(entry => [
+      entry.name,
+      `My friends at yelp say that ${entry.name} at ${entry.location.address1} rated at ${entry.rating} stars in ${location} is quite the restaurant indeed. My contacts never let me down, a butler is well connected you know!`,
+      entry.image_url,
+      entry.url
+    ]);
+    result.push(randomize(totalResults));
   } catch (err) {
     console.log(`Encountered this error: ${err}`);
     message =
       "I'm having trouble getting ahold of my contacts at this moment in time please try again later.";
+    result.push(message);
   }
-  return message;
+  return result;
 };
 
-const webhookProcessing = async (req, res, msg) => {
+const webhookProcessing = async (req, res, restaurantResult) => {
   const agent = new WebhookClient({ request: req, response: res });
-  const message = await msg;
+  const results = await restaurantResult;
   const restaurantIntent = agent => {
-    console.log(`Here inside restaurant intent: ${message}`);
-    agent.add(message);
+    console.log(`Here inside restaurant intent: ${results}`);
+    if (results.length > 1) {
+      agent.add(results[1]);
+      agent.add(
+        new Card({
+          title: results[0],
+          image_url: results[2],
+          text: results[1],
+          buttonText: "See more reviews!",
+          buttonUrl: results[3]
+        })
+      );
+    } else {
+      agent.add(results[0]);
+    }
   };
 
   let intentMap = new Map();
@@ -54,8 +69,8 @@ const webhookProcessing = async (req, res, msg) => {
 
 app.post("/", (req, res) => {
   console.info("Server was hit");
-  const msg = yelpMessage(req);
-  webhookProcessing(req, res, msg);
+  const restaurantResult = yelpMessage(req);
+  webhookProcessing(req, res, restaurantResult);
 });
 
 app.listen(process.env.PORT || 8000, () => {
