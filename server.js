@@ -40,6 +40,7 @@ const yelpMessage = async req => {
 
 const webhookProcessing = async (req, res, msg) => {
   const agent = new WebhookClient({ request: req, response: res });
+  console.log(agent.request);
   const message = await msg;
   const restaurantIntent = agent => {
     console.log(`Here inside restaurant intent: ${message}`);
