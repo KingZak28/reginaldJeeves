@@ -3,7 +3,7 @@ const language = require("../Language/en.json");
 const { DDG } = require("node-ddg-api");
 const ddg = new DDG("reginaldJeeves");
 
-const ddgSearch = query =>
+const ddgSearch = query => {
   ddg.instantAnswer(query, { skip_disambig: "0" }, (err, response) => {
     let message;
     try {
@@ -19,5 +19,5 @@ const ddgSearch = query =>
     }
     return message;
   });
-
+};
 module.exports = ddgSearch;
