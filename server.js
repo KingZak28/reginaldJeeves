@@ -5,23 +5,34 @@ const app = express();
 const yelpMessage = require("./Resources/yelpMessage");
 app.use(bodyParser.json());
 
-const webhookProcessing = async (req, res, msg) => {
+const webhookProcessing = async (req, res, msg = "") => {
   const agent = new WebhookClient({ request: req, response: res });
-  console.log(agent.parameters);
-  const message = await msg;
-  const restaurantIntent = agent => {
-    console.log(`Here inside restaurant intent: ${message}`);
-    agent.add(message);
-  };
-
   let intentMap = new Map();
+  console.log(agent.parameters.geocity);
+
+  if (agent.parameters.geocity) {
+    const message = await msg;
+    const restaurantIntent = agent => {
+      console.log(`Here inside restaurant intent: ${message}`);
+      agent.add(message);
+    };
+    intentMap.set("restaurantIntent", restaurantIntent);
+  }
+
   intentMap.set("restaurantIntent", restaurantIntent);
   agent.handleRequest(intentMap);
 };
 
 app.post("/", (req, res) => {
   console.info("Server was hit");
-  const msg = yelpMessage(req);
+  const location =
+    req.body.queryResult &&
+    req.body.queryResult.parameters &&
+    req.body.queryResult.parameters.geocity;
+  if (location) {
+    console.log(`City searched for is: ${location}`);
+    const msg = yelpMessage(location);
+  }
   webhookProcessing(req, res, msg);
 });
 

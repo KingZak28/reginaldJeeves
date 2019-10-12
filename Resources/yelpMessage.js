@@ -4,15 +4,9 @@ const yelp = require("yelp-fusion");
 const client = yelp.client(YELP_KEY);
 const language = require("../Language/en.json");
 
-const yelpMessage = async req => {
+const yelpMessage = async location => {
   let message = "test";
   try {
-    const location =
-      req.body.queryResult &&
-      req.body.queryResult.parameters &&
-      req.body.queryResult.parameters.geocity
-        ? req.body.queryResult.parameters.geocity
-        : "Liverpool england"; //Default city for now
     const yelpResponse = await client.search({
       location: location
     });
