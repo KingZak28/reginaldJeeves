@@ -3,7 +3,7 @@ const language = require("../Language/en.json");
 const { DDG } = require("node-ddg-api");
 const ddg = new DDG("reginaldJeeves");
 
-ddg.instantAnswer(query, { skip_disambig: "0" }, (err, response) => {
+ddg.instantAnswer((query = ""), { skip_disambig: "0" }, (err, response) => {
   try {
     const abstract = response.Abstract;
     const text = response.RelatedTopics[0].Text;
