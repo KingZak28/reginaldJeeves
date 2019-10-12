@@ -51,6 +51,7 @@ app.post("/", (req, res) => {
   } else if (query) {
     console.log(`Query to search for is: ${query}`);
     msg = ddgSearch(query);
+    console.log(msg);
   }
   webhookProcessing(req, res, msg);
 });
