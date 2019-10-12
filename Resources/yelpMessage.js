@@ -1,4 +1,5 @@
 const { YELP_KEY } = process.env;
+const randomize = require("../utils/randomize");
 const yelp = require("yelp-fusion");
 const client = yelp.client(YELP_KEY);
 const language = require("../Language/en.json");
@@ -15,8 +16,6 @@ const yelpMessage = async req => {
     const yelpResponse = await client.search({
       location: location
     });
-
-    console.log(yelpResponse.jsonBody);
     const data = yelpResponse.jsonBody.businesses;
 
     const names = data.map(
