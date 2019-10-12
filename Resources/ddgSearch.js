@@ -4,7 +4,6 @@ const { DDG } = require("node-ddg-api");
 const ddg = new DDG("reginaldJeeves");
 
 const ddgSearch = query => {
-  let arr = [];
   ddg.instantAnswer(query, { skip_disambig: "0" }, (err, response) => {
     try {
       const abstract = response.Abstract;
@@ -19,9 +18,8 @@ const ddgSearch = query => {
     }
 
     console.log(`Message here is: ${message}`);
-    arr.push(message);
     return message;
   });
-  console.log(`arr is: ${arr}`);
+  console.log(`ddg: ${ddg}`);
 };
 module.exports = ddgSearch;
