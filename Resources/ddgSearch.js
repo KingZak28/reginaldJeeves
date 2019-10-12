@@ -4,28 +4,24 @@ const { DDG } = require("node-ddg-api");
 const ddg = new DDG("reginaldJeeves");
 
 const ddgSearch = query => {
-  const answer = ddg.instantAnswer(
-    query,
-    { skip_disambig: "0" },
-    (err, response) => {
-      let message;
-      try {
-        const abstract = response.Abstract;
-        const text = response.RelatedTopics[0].Text;
-        abstract.length > text.length
-          ? (message = `My friends at duck duck go tell me that: ${abstract}`)
-          : (message = `My associates at duck duck go tell me that: ${text}`);
-      } catch (err) {
-        console.log(`Error encountered: ${err}`);
-        message =
-          "My apologies friend, I'm having trouble contacting my associates";
-      }
-
-      console.log(`Message here is: ${message}`);
-      return message;
+  ddg.instantAnswer(query, { skip_disambig: "0" }, (err, response) => {
+    let message;
+    try {
+      const abstract = response.Abstract;
+      const text = response.RelatedTopics[0].Text;
+      abstract.length > text.length
+        ? (message = `My friends at duck duck go tell me that: ${abstract}`)
+        : (message = `My associates at duck duck go tell me that: ${text}`);
+    } catch (err) {
+      console.log(`Error encountered: ${err}`);
+      message =
+        "My apologies friend, I'm having trouble contacting my associates";
     }
-  );
-  console.log(`Response is ${answer}`);
-  return answer;
+
+    console.log(`Message here is: ${message}`);
+    return message;
+  });
+  console.log(`Response is ${message}`);
+  return message;
 };
 module.exports = ddgSearch;
