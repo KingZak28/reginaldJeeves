@@ -24,4 +24,4 @@ const ddgSearch = query => {
   });
   console.log(`arr is: ${arr}`);
 };
-module.exports = ddg.instantAnswer;
+module.exports = ddgSearch;
