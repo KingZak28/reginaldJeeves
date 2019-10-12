@@ -4,14 +4,12 @@ const { duckIt } = require("node-duckduckgo");
 
 const ddgSearch = async query => {
   try {
-    const result = await duckIt("netflix");
-    console.log(result.data.AbstractText);
+    const result = await duckIt(query);
     const abstract = result.data.AbstractText;
     const text = result.data.RelatedTopics[0].Text;
     abstract.length > text.length
       ? (message = `My friends at duck duck go tell me that: ${abstract}`)
       : (message = `My associates at duck duck go tell me that: ${text}`);
-    console.log(message);
     return message;
   } catch (err) {
     console.error("Error Encountered: ", err);
