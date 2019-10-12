@@ -3,12 +3,12 @@ const express = require("express");
 const { WebhookClient } = require("dialogflow-fulfillment");
 const app = express();
 const yelpMessage = require("./Resources/yelpMessage");
+const ddgSearch = require("./Resources/ddgSearch");
 app.use(bodyParser.json());
 
 const webhookProcessing = async (req, res, msg = "") => {
   const agent = new WebhookClient({ request: req, response: res });
   let intentMap = new Map();
-  console.log(`request param has city: ${agent.parameters.geocity}`);
 
   if (agent.parameters.geocity) {
     const message = await msg;
@@ -17,6 +17,12 @@ const webhookProcessing = async (req, res, msg = "") => {
       agent.add(message);
     };
     intentMap.set("restaurantIntent", restaurantIntent);
+  } else if (agent.parameters.any) {
+    const searchIntent = agent => {
+      console.log(`Here inside search intent: ${message}`);
+      agent.add(msg);
+    };
+    intentMap.set("searchIntent", searchIntent);
   }
 
   agent.handleRequest(intentMap);
@@ -24,17 +30,27 @@ const webhookProcessing = async (req, res, msg = "") => {
 
 app.post("/", (req, res) => {
   console.info(
-    `Server was hit with paramters: ${req.body.queryResult.parameters.sysany}`
+    `Server was hit with paramters: ${req.body.queryResult.parameters.any}`
   );
   console.log(req.body);
   let msg;
+
   const location =
     req.body.queryResult &&
     req.body.queryResult.parameters &&
     req.body.queryResult.parameters.geocity;
+
+  const query =
+    req.body.queryResult &&
+    req.body.queryResult.parameters &&
+    req.body.queryResult.parameters.any;
+
   if (location) {
     console.log(`City searched for is: ${location}`);
     msg = yelpMessage(location);
+  } else if (query) {
+    console.log(`Query to search for is: ${query}`);
+    msg = ddgSearch(query);
   }
   webhookProcessing(req, res, msg);
 });
