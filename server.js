@@ -33,7 +33,7 @@ app.post("/", (req, res) => {
   console.info(
     `Server was hit with paramters: ${req.body.queryResult.parameters.any}`
   );
-  console.log(req.body);
+
   let msg;
 
   const location =
