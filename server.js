@@ -1,6 +1,5 @@
 const bodyParser = require("body-parser");
 const express = require("express");
-const randomize = require("./utils/randomize");
 const { WebhookClient } = require("dialogflow-fulfillment");
 const app = express();
 const yelpMessage = require("./Resources/yelpMessage");

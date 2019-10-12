@@ -1,7 +1,7 @@
 const { YELP_KEY } = process.env;
 const yelp = require("yelp-fusion");
 const client = yelp.client(YELP_KEY);
-const language = require("./en.json.js");
+const language = require("../Language/en.json");
 
 const yelpMessage = async req => {
   let message = "test";
