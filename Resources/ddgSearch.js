@@ -23,6 +23,7 @@ const ddgSearch = query => {
       return message;
     }
   );
+  console.log(`Response is ${response}`);
   return response;
 };
 module.exports = ddgSearch;
