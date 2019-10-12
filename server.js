@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 const webhookProcessing = async (req, res, msg = "") => {
   const agent = new WebhookClient({ request: req, response: res });
   let intentMap = new Map();
-  console.log(agent.parameters.geocity);
+  console.log(`request param has city: ${agent.parameters.geocity}`);
 
   if (agent.parameters.geocity) {
     const message = await msg;
@@ -19,7 +19,6 @@ const webhookProcessing = async (req, res, msg = "") => {
     intentMap.set("restaurantIntent", restaurantIntent);
   }
 
-  intentMap.set("restaurantIntent", restaurantIntent);
   agent.handleRequest(intentMap);
 };
 
