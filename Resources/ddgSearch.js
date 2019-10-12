@@ -12,6 +12,7 @@ const ddgSearch = query => {
       try {
         const abstract = response.Abstract;
         const text = response.RelatedTopics[0].Text;
+        console.log(`Abstract: ${abstract} and text: ${text}`);
         abstract.length > text.length
           ? (message = `My friends at duck duck go tell me that: ${abstract}`)
           : (message = `My associates at duck duck go tell me that: ${text}`);
