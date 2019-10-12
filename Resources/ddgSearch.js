@@ -3,9 +3,8 @@ const language = require("../Language/en.json");
 const { DDG } = require("node-ddg-api");
 const ddg = new DDG("reginaldJeeves");
 
-const ddgSearch = query => {
+const ddgSearch = (query, message = "") => {
   ddg.instantAnswer(query, { skip_disambig: "0" }, (err, response) => {
-    let message;
     try {
       const abstract = response.Abstract;
       const text = response.RelatedTopics[0].Text;
@@ -21,7 +20,6 @@ const ddgSearch = query => {
     console.log(`Message here is: ${message}`);
     return message;
   });
-  console.log(`ddg: ${ddg}`);
   console.log(`Response is ${message}`);
   return message;
 };
