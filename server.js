@@ -24,8 +24,9 @@ const webhookProcessing = async (req, res, msg = "") => {
 
 app.post("/", (req, res) => {
   console.info(
-    `Server was hit with paramters: ${req.body.queryResult.parameters}`
+    `Server was hit with paramters: ${req.body.queryResult.parameters.sysany}`
   );
+  console.log(req.body);
   let msg;
   const location =
     req.body.queryResult &&
