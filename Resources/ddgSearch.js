@@ -21,6 +21,8 @@ const ddgSearch = query => {
         message =
           "My apologies friend, I'm having trouble contacting my associates";
       }
+
+      console.log(`Message here is: ${message}`);
       return message;
     }
   );
