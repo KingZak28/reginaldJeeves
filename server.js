@@ -25,13 +25,14 @@ const webhookProcessing = async (req, res, msg = "") => {
 
 app.post("/", (req, res) => {
   console.info("Server was hit");
+  let msg;
   const location =
     req.body.queryResult &&
     req.body.queryResult.parameters &&
     req.body.queryResult.parameters.geocity;
   if (location) {
     console.log(`City searched for is: ${location}`);
-    const msg = yelpMessage(location);
+    msg = yelpMessage(location);
   }
   webhookProcessing(req, res, msg);
 });
