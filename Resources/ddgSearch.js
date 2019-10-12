@@ -19,3 +19,5 @@ const ddgSearch = query =>
     }
     return message;
   });
+
+module.exports = ddgSearch;
