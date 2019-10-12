@@ -3,10 +3,8 @@ const language = require("../Language/en.json");
 const { DDG } = require("node-ddg-api");
 const ddg = new DDG("reginaldJeeves");
 
-module.exports = ddg.instantAnswer(
-  query,
-  { skip_disambig: "0" },
-  (err, response) => {
+const ddgSearch = query =>
+  ddg.instantAnswer(query, { skip_disambig: "0" }, (err, response) => {
     let message;
     try {
       const abstract = response.Abstract;
@@ -20,5 +18,4 @@ module.exports = ddg.instantAnswer(
         "My apologies friend, I'm having trouble contacting my associates";
     }
     return message;
-  }
-);
+  });
