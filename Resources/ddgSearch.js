@@ -4,7 +4,7 @@ const { DDG } = require("node-ddg-api");
 const ddg = new DDG("reginaldJeeves");
 
 const ddgSearch = query => {
-  const response = ddg.instantAnswer(
+  const answer = ddg.instantAnswer(
     query,
     { skip_disambig: "0" },
     (err, response) => {
@@ -12,7 +12,6 @@ const ddgSearch = query => {
       try {
         const abstract = response.Abstract;
         const text = response.RelatedTopics[0].Text;
-        console.log(`Abstract: ${abstract} and text: ${text}`);
         abstract.length > text.length
           ? (message = `My friends at duck duck go tell me that: ${abstract}`)
           : (message = `My associates at duck duck go tell me that: ${text}`);
@@ -26,7 +25,7 @@ const ddgSearch = query => {
       return message;
     }
   );
-  console.log(`Response is ${response}`);
-  return response;
+  console.log(`Response is ${answer}`);
+  return answer;
 };
 module.exports = ddgSearch;
