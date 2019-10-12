@@ -21,6 +21,7 @@ const ddgSearch = query => {
     console.log(`Message here is: ${message}`);
     return message;
   });
+  console.log(`ddg: ${ddg}`);
   console.log(`Response is ${message}`);
   return message;
 };
