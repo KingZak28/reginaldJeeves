@@ -18,8 +18,8 @@ const webhookProcessing = async (req, res, msg = "") => {
     };
     intentMap.set("restaurantIntent", restaurantIntent);
   } else if (agent.parameters.any) {
+    const message = await msg;
     const searchIntent = agent => {
-      const message = await msg;
       console.log(`Here inside search intent: ${message}`);
       agent.add(message);
     };
